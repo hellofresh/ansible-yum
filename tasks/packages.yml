@@ -1,0 +1,6 @@
+---
+
+- name: packages | Make sure the default packages are installed
+  apt:
+    name: "{{yum_default_packages|join(',')}}"
+    state: present
