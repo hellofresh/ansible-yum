@@ -3,20 +3,20 @@
 - name: update | Check if first boot file exists
   stat:
     path="{{ upgrade_now_first_boot_file }}"
-  register: first_boot_stat
+  register: yum_first_boot_stat
 
 - name: update | Update yum if first time or force
   yum:
     name: "*"
     state: latest
   register: yum_updated
-  when: not first_boot_stat.stat.exists or upgrade_now_force
+  when: not yum_first_boot_stat.stat.exists or yum_upgrade_now_force
 
 - name: update | Reboot now
   shell: sleep 2 && shutdown -r now "Ansible updates triggered"
   async: 1
   poll: 0
-  when: yum_updated | changed and reboot_if_needed
+  when: yum_updated | changed and yum_reboot_if_needed
 
 - name: update | Check and set if ansible_ssh_host is set
   set_fact:
@@ -41,7 +41,7 @@
 
 - name: update | pause a little to ensure everything is running
   pause:
-    seconds="{{ upgrade_now_pause_after_reboot }}"
+    seconds="{{ yum_upgrade_now_pause_after_reboot }}"
   when: yum_updated | changed
 
 - name: update | Touch file guard
