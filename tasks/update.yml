@@ -2,7 +2,7 @@
 
 - name: update | Check if first boot file exists
   stat:
-    path="{{ upgrade_now_first_boot_file }}"
+    path="{{ yum_upgrade_now_first_boot_file }}"
   register: yum_first_boot_stat
 
 - name: update | Update yum if first time or force
@@ -47,4 +47,4 @@
 - name: update | Touch file guard
   copy:
     content=""
-    dest="{{ upgrade_now_first_boot_file }}"
+    dest="{{ yum_upgrade_now_first_boot_file }}"
